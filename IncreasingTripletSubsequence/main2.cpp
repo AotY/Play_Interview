@@ -14,6 +14,7 @@ public:
     bool increasingTriplet(vector<int> &nums) {
         int m1 = INT_MAX;
         int m2 = INT_MAX;
+        // 
         for (int a : nums) {
             if (a <= m1)
                 m1 = a;

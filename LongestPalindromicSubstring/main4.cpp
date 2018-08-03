@@ -13,34 +13,65 @@ static const auto __ = []() {
 class Solution {
 public:
     string longestPalindrome(string s) {
-        //insert "#"
-        string temp = "$#";
+        string ss = "";
+        int length = s.length();
 
-        for (int i = 0; i < s.size(); ++i) {
-            temp += s[i];
-            temp += "#";
+        int *radius = new int[2 * length + 1];
+
+        for (int i = 0; i<length; i++) {
+            ss +='#';
+            ss +=s[i];
         }
 
-        //find the longestPalindrome in temp
-        vector<int> p(temp.size(), 0);
+        ss += '#';
 
-        int idx = 0, r_max = 0, res_center = 0, res_length = 0;
+        for (int i = 0; i <= 2 * length; i++)
+            radius[i] = 0;
 
-        for (int i = 0; i < temp.size(); ++i) {
-            p[i] = (r_max > i) ? min(p[2 * idx - i], r_max - i) : 1;
+        radius[1] = 1;
 
-            while (temp[i + p[i]] == temp[i - p[i]]) ++p[i];
-            if (r_max < i + p[i]) {
-                idx = i;
-                r_max = i + p[i];
+        int i = 1;
+
+        while (i < 2 * length) {
+            if (radius[i] == 0) {
+                i++;
+                int j = i;
+                while ((2 * i - j >= 0) && ss[j] == ss[2 * i - j])
+                    j++;
+                radius[i] = (j - 1) - i;
+                continue;
+
             }
-            if (res_length < p[i]) {
-                res_length = p[i];
-                res_center = i;
+
+            for (int k = 1; k <= radius[i]; k++) {
+                if (radius[i] - k>radius[i - k])
+                    radius[i + k] = radius[i - k];
+                else if (radius[i] - k < radius[i - k]) {
+                    radius[i + k] = radius[i] - k;
+                    i = i + k;
+                }
+                else if (radius[i] - k == radius[i - k]) {
+                    int j = i + radius[i];
+                    i = i + k;
+                    while ((2 * i - j >= 0) && ss[j] == ss[2 * i - j])
+                        j++;
+                    radius[i] = (j-1) - i;
+                    break;
+                }
             }
         }
 
-        return s.substr((res_center - res_length) / 2, res_length - 1);
+        int maxLength = 0, maxIndex = 0;
+        for (int i = 0; i<2 * length; i++)
+            if (radius[i]>maxLength) {
+                maxLength = radius[i];
+                maxIndex = i;
+            }
+
+        int startPos = maxIndex/2 - maxLength/2 ;
+        string maxS(s, startPos, maxLength);
+        return maxS;
+
     }
 };
 
