@@ -32,10 +32,11 @@ public:
 
         int val = find_k(root->left, k);
 
-        if (k == 0)
+        if (k == 0) // 找到第k 小的值
             return val;
 
-        if (--k == 0)
+        k --;
+        if (k == 0) // 如果当前节点为第k小的值
             return root->val;
 
         return find_k(root->right, k);
