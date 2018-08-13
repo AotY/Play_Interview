@@ -29,6 +29,7 @@ private:
 
     int n;
     int m;
+    vector<vector<bool>> mark;
 
     bool inArea(int i, int j) {
         if (i >= 0 && i < n && j >= 0 && j < m)
@@ -38,40 +39,35 @@ private:
     }
 
 
-    bool searchWordInBoard(vector<vector<char>> &board, string &word, int i, int j) {
+    bool searchWordInBoard(vector<vector<char>> &board, string &word, int i, int j, string curWord) {
 
-        vector<vector<bool>> mark = vector<vector<bool>>(n, vector<bool>(m, false));
+        if (curWord.size() == word.size()) {
+            if (curWord == word)
+                return true;
 
-        queue<SearchStatus> searchQueue;
-        SearchStatus ss(i, j, 0);
-        searchQueue.push(ss);
+            return false;
+        }
 
-        while (!searchQueue.empty()) {
-            //
-            SearchStatus curSS = searchQueue.front();
-            searchQueue.pop();
+        int res = false;
+        // 上下左右 四个方向查找， 保证不能越界，还要标记是否已经访问
+        for (int k = 0; k < 4; ++k) {
+            int newI = i + moveArr[k][0];
+            int newJ = j + moveArr[k][1];
 
-            if (board[curSS.i][curSS.j] == word[curSS.matchIndex]) {
-
-                mark[curSS.i][curSS.j] = true;
-
-                if (curSS.matchIndex == (word.size() - 1))
+            if (inArea(newI, newJ) && !mark[newI][newJ]) {
+                mark[newI][newI] = true;
+                curWord.push_back(board[newI][newI]);
+                res = searchWordInBoard(board, word, newI, newJ, curWord);
+                if (res)
                     return true;
+                curWord.pop_back();
+                mark[newI][newI] = false;
 
-                // 上下左右 四个方向查找， 保证不能越界，还要标记是否已经访问
-                for (int k = 0; k < 4; ++k) {
-                    int newI = curSS.i + moveArr[k][0];
-                    int newJ = curSS.j + moveArr[k][1];
-
-                    if (inArea(newI, newJ) && !mark[newI][newJ]) {
-                        SearchStatus newSS(newI, newJ, curSS.matchIndex + 1);
-                        searchQueue.push(newSS);
-                    }
-                }
             }
         }
 
-        return false;
+
+        return res;
     }
 
 public:
@@ -83,20 +79,25 @@ public:
             return results;
         m = board[0].size();
 
+        mark = vector<vector<bool>>(n, vector<bool>(m, false));
 
         // 搜索每一个word是否在board出现
         for (int i = 0; i < words.size(); ++i) {
-
             bool isBreak = false;
             for (int j = 0; j < n; ++j) {
                 for (int k = 0; k < m; ++k) {
                     if (board[j][k] == words[i][0]) {
-                        bool isExists = searchWordInBoard(board, words[i], j, k);
+                        string curWord = "";
+                        curWord.push_back(board[j][k]);
+                        mark[j][k] = true;
+                        bool isExists = searchWordInBoard(board, words[i], j, k, curWord);
                         if (isExists) {
                             resultsSet.insert(words[i]);
                             isBreak = true;
                             break;
                         }
+                        mark[j][k] = false;
+                        curWord.pop_back();
                     }
                 }
 

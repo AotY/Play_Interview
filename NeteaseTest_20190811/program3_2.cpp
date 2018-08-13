@@ -8,26 +8,32 @@ using namespace std;
 
 // 2 2 6
 // zzaa 还是回溯法，哎，笔试时没弄出来
+// 开存储a和z 这样就好了 (不超时）
 
-set<string> results;
-vector<bool> mark;
+vector<string> results;
 
-void searchWords(string &str, string &curWord, int index) {
+void searchWords(string &a, string &z, string &curWord, int totalLen) {
 
-    if (curWord.size() == str.size()) {
-        results.insert(curWord);
+    if (curWord.size() == totalLen) {
+        results.push_back(curWord);
         return;
     }
 
-    // 后面排序就好了，哎，我的锅
-    for (int i = 0; i < str.size(); ++i) {
-        if (!mark[i]) {
-            curWord.push_back(str[i]);
-            mark[i] = true;
-            searchWords(str, curWord, i + 1);
-            curWord.pop_back();
-            mark[i] = false;
-        }
+    if (a.size() > 0) {
+        curWord.push_back(a[0]);
+        a.pop_back();
+        searchWords(a, z, curWord, totalLen);
+        curWord.pop_back();
+        a.push_back('a');
+    }
+
+
+    if (z.size() > 0) {
+        curWord.push_back(z[0]);
+        z.pop_back();
+        searchWords(a, z, curWord, totalLen);
+        curWord.pop_back();
+        z.push_back('z');
     }
 
 
@@ -42,29 +48,27 @@ int main() {
 
     // 单词是按照字典顺序排序的
 
-    string str;
+    string a;
     for (int i = 0; i < n; ++i) {
-        str.push_back('a');
+        a.push_back('a');
     }
 
 
+    string z;
     for (int i = 0; i < m; ++i) {
-        str.push_back('z');
+        z.push_back('z');
     }
 
-
-    mark = vector<bool>(str.size(), false);
 
     string curWord = "";
-    searchWords(str, curWord, 0);
+    searchWords(a, z, curWord, m + n);
 
     // 排序
-    vector<string> resultsVector(results.begin(), results.end());
 
-    sort(resultsVector.begin(), resultsVector.end(), [&](string &s1, string &s2) { return s1 < s2; });
+    sort(results.begin(), results.end(), [&](string &s1, string &s2) { return s1 < s2; });
 
-//    cout << results.size() << endl;
-    cout << resultsVector[k-1] << endl;
+    cout << results.size() << endl;
+    cout << results[k - 1] << endl;
 
     return 0;
 }

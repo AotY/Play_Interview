@@ -2,86 +2,33 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
 // 2 2 6
-// zzaa
+// zzaa 还是回溯法，哎，笔试时没弄出来
+// 估计这个超时
 
-void searchAWords(string &a, string &b, string &curWord, int index, int n, int m, int ln, int lm);
+set<string> results;
+vector<bool> mark;
 
-void searchBWords(string &a, string &b, string &curWord, int index, int n, int m, int ln, int lm);
+void searchWords(string &str, string &curWord, int index) {
 
-
-vector<string> results;
-vector<bool> aMark;
-vector<bool> bMark;
-
-
-void searchBWords(string &a, string &b, string &curWord, int index, int n, int m, int ln, int lm) {
-    if (curWord.size() >= (n + m)) {
-        results.push_back(curWord);
+    if (curWord.size() == str.size()) {
+        results.insert(curWord);
         return;
     }
 
-    for (int i = index; i < m; ++i) {
-        if (!bMark[i] && index < (n + m)) {
-            bMark[i] = true;
-            curWord.push_back(b[i]);
-            lm--;
-            searchBWords(a, b, curWord, i + 1, n, m, ln, lm);
-            bMark[i] = false;
+    // 后面排序就好了，哎，我的锅
+    for (int i = 0; i < str.size(); ++i) {
+        if (!mark[i]) {
+            curWord.push_back(str[i]);
+            mark[i] = true;
+            searchWords(str, curWord, i + 1);
             curWord.pop_back();
+            mark[i] = false;
         }
-    }
-
-    if (ln > 0)
-        searchAWords(a, b, curWord, 0, n, m, ln, lm);
-
-}
-
-void searchAWords(string &a, string &b, string &curWord, int index, int n, int m, int ln, int lm) {
-    if (curWord.size() >= (n + m)) {
-        results.push_back(curWord);
-        return;
-    }
-
-    for (int i = index; i < n; ++i) {
-        if (!aMark[i] && index < (n + m)) {
-            aMark[i] = true;
-            curWord.push_back(a[i]);
-            ln--;
-            searchAWords(a, b, curWord, i + 1, n, m, ln, lm);
-            aMark[i] = false;
-            curWord.pop_back();
-        }
-    }
-
-
-    if (lm > 0)
-        searchBWords(a, b, curWord, 0, n, m, ln, lm);
-
-}
-
-void searchWords(string &a, string &b, int n, int m) {
-
-
-    // a 在前面的组合
-    for (int i = 0; i < n; ++i) {
-        string curWord = "";
-        curWord.push_back(a[i]);
-        aMark[i] = true;
-        searchAWords(a, b, curWord, i + 1, n, m, n - 1, m);
-        aMark[i] = false;
-    }
-
-    // z在前面的组合
-    for (int i = 0; i < m; ++i) {
-        string curWord = "";
-        curWord.push_back(b[i]);
-        bMark[i] = true;
-        searchBWords(a, b, curWord, i + 1, n, m, n, m - 1);
-        bMark[i] = false;
     }
 
 
@@ -96,28 +43,29 @@ int main() {
 
     // 单词是按照字典顺序排序的
 
-    string a;
+    string str;
     for (int i = 0; i < n; ++i) {
-        a.push_back('a');
+        str.push_back('a');
     }
 
 
-    string b;
     for (int i = 0; i < m; ++i) {
-        b.push_back('z');
+        str.push_back('z');
     }
 
 
-    aMark = vector<bool>(n, false);
+    mark = vector<bool>(str.size(), false);
 
-    bMark = vector<bool>(m, false);
-    searchWords(a, b, n, m);
+    string curWord = "";
+    searchWords(str, curWord, 0);
 
     // 排序
-    sort(results.begin(), results.end(), [&](string &s1, string &s2) { return s1 < s2; });
+    vector<string> resultsVector(results.begin(), results.end());
 
-    cout << results.size() << endl;
-    cout << results[k - 1] << endl;
+    sort(resultsVector.begin(), resultsVector.end(), [&](string &s1, string &s2) { return s1 < s2; });
+
+//    cout << results.size() << endl;
+    cout << resultsVector[k-1] << endl;
 
     return 0;
 }

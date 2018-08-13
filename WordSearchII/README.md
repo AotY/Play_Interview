@@ -12,16 +12,18 @@ The same letter cell may not be used more than once in a word.
 Example:
 
 Input: 
-words = ["oath","pea","eat","rain"] and board =
-[
-  ['o','a','a','n'],
-  ['e','t','a','e'],
-  ['i','h','k','r'],
-  ['i','f','l','v']
-]
+words = ["oath","pea","eat","rain"] and 
+board =
+        [
+          ['o','a','a','n'],
+          ['e','t','a','e'],
+          ['i','h','k','r'],
+          ['i','f','l','v']
+        ]
 
 Output: ["eat","oath"]
 
 Note:
 You may assume that all inputs are consist of lowercase letters a-z.
 ```
+
