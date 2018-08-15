@@ -11,6 +11,7 @@ int dp(vector<int> &aArr, vector<int> &bArr, int n) {
     vector<vector<int>> memoA = vector<vector<int>>(n, vector<int>(n));
     vector<vector<int>> memoB = vector<vector<int>>(n, vector<int>(n));
 
+    // 换为两个一位数组
     int res = 0;
     for (int i = 0; i < n; ++i) {
         for (int j = i; j < n; ++j) {

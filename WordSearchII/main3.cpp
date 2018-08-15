@@ -54,10 +54,10 @@ public:
         for (int i = 0; i < board.size(); ++i) {
             for (int j = 0; j < board[i].size(); ++j) {
                 if (T.root->child[board[i][j] - 'a']) {
-                    // 如果满足第一个位置
-                    search(board, T.root->child[board[i][j] - 'a'], i, j, visit, res);
-                }
+                // 如果满足第一个位置
+                search(board, T.root->child[board[i][j] - 'a'], i, j, visit, res);
             }
+        }
         }
         return res;
     }
@@ -79,9 +79,12 @@ public:
         visit[i][j] = true;
 
         for (auto &a : d) {
-            int nx = a[0] + i, ny = a[1] + j;
-            if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && !visit[nx][ny] &&
-                p->child[board[nx][ny] - 'a']) {
+            int nx = a[0] + i;
+            int ny = a[1] + j;
+            if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() &&
+                    !visit[nx][ny] &&
+                p->child[board[nx][ny] - 'a'])
+            {
                 search(board, p->child[board[nx][ny] - 'a'], nx, ny, visit, res);
             }
         }

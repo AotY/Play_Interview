@@ -6,6 +6,15 @@ using namespace std;
 
 // 使用动态规划思想
 
+
+static const auto _____ = []()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    return nullptr;
+}();
+
+
 class Solution {
 
 public:
@@ -22,17 +31,20 @@ public:
 
         int findSum = sum / 2;
 
-        vector<bool> memo(findSum + 1, false);
+        vector<bool> memo(findSum + 1);
 
-        // 第一步
-        for (int j = 0; j <= findSum; ++j) {
-            memo[j] = (j == nums[0]) ;
+        // 第一步，初始化，是否只考虑第一个元素就能填充满
+        for (int i = 0; i <= findSum; ++i) {
+            memo[i] = (i == nums[0]) ;
         }
 
+        //
         for (int i = 1; i < nums.size(); ++i) {
             for (int j = findSum; j >= nums[i]; j--) {
                 memo[j] = (memo[j] || memo[j - nums[i]]);
             }
+            if (memo[findSum])
+                break;
         }
 
         return memo[findSum];
