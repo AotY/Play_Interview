@@ -26,13 +26,15 @@ private:
 
             // The next player can not win, current player wins
             bool res = searchForWin(maxChoosableInteger, desiredTotal - (i + 1), state | (1 << i));
-            if (!res) {
+            if (!res) { // res == false
                 memo[state] = 1;
                 return true;
             }
+
+
         }
 
-        memo[state] = false;
+        memo[state] = 0;
         return false;
     }
 
