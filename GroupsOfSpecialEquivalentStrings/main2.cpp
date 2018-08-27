@@ -11,9 +11,10 @@ class Solution {
 public:
     int numSpecialEquivGroups(vector<string> &A) {
 
-        unordered_map<string, int> mp;
+//        unordered_map<string, int> mp;
+        unordered_set<string> aSet;
 
-        // 这个可以的
+        // 这个可以的,拆开，排序
         for (auto &str : A) {
             string evenStr;
             string oddStr;
@@ -30,17 +31,19 @@ public:
 
             string newStr = evenStr + oddStr;
 
-            mp[newStr] ++ ;
+//            mp[newStr] ++ ;
+            aSet.insert(newStr);
         }
-        return mp.size();
+//        return mp.size();
+        return aSet.size();
     }
 };
 
 int main() {
     Solution s;
 
-//    vector<string> A = {"couxuxaubw", "zsptcwcghr", "kkntvvhbcc", "nkhtcvvckb", "crcwhspgzt"};
-    vector<string> A = {"kkntvvhbcc", "nkhtcvvckb"};
+    vector<string> A = {"couxuxaubw", "zsptcwcghr", "kkntvvhbcc", "nkhtcvvckb", "crcwhspgzt"};
+//    vector<string> A = {"kkntvvhbcc", "nkhtcvvckb"};
 //    vector<string> A = {"abcd", "cdab", "adcb", "cbad"};
     cout << s.numSpecialEquivGroups(A) << endl;
 //    std::cout << "Hello, World!" << std::endl;
