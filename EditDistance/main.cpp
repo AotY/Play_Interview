@@ -17,7 +17,7 @@ public:
 
         // 尝试使用三类操作 1. 插入; 2. 删除; 3. 替换
 
-        // We define the state dp[i][j] to be the minimum number of operations to
+        // We define the state memo[i][j] to be the minimum number of operations to
         // convert word1[0..i - 1] to word2[0..j - 1]
         vector<vector<int>> memo = vector<vector<int>>(len1 + 1, vector<int>(len2 + 1));
 
