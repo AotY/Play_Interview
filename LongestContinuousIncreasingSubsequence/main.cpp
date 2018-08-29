@@ -29,7 +29,7 @@ public:
         }
 
         res = max(res, curLen);
-        
+
         return res;
     }
 };
