@@ -29,6 +29,7 @@ private:
         int minVal = INT_MAX;
         int minListIndex = 0;
         ListNode *minNode;
+
         for (int i = 0; i < k; ++i) {
             if (newLists[i] != NULL) {
                 if (newLists[i]->val < minVal) {
