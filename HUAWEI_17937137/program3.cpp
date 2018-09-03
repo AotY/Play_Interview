@@ -124,7 +124,6 @@ int main() {
 
     vector<vector<int>> sudoku = vector<vector<int>>(N, vector<int>(N));
 
-//    vector<pair<int, int>> zeroPositions = vector<pair<int, int>>();
     stack<pair<int, int>> zeroPositions = stack<pair<int, int>>();
 
 
